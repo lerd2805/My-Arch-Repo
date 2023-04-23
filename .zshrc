@@ -37,10 +37,8 @@ zstyle ':completion:*' menu select=long
 zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
 zstyle ':completion:*' use-compctl false
 zstyle ':completion:*' verbose true
-
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
-source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
@@ -58,12 +56,12 @@ alias ls='lsd --group-dirs=first'
 alias cat='bat'
 alias icat='kitty icat '
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
 # Plugins
-source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-source /usr/share/zsh-sudo/sudo.plugin.zsh
+PLUGINS_DIR=/usr/share/zsh/plugins
+
+source $PLUGINS_DIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source $PLUGINS_DIR/zsh-autosuggestions/zsh-autosuggestions.zsh
+source $PLUGINS_DIR/zsh-sudo/sudo.plugin.zsh
 
 # Functions
 function mkt(){
@@ -95,6 +93,8 @@ function man() {
     man "$@"
 }
 
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
 # fzf improvement
 function fzf-lovely(){
 
@@ -122,6 +122,16 @@ function rmk(){
 	scrub -p dod $1
 	shred -zun 10 -v $1
 }
+
+# Fix Keys Home, END, DELETE and add shorcut for move between words
+bindkey "^[[H" beginning-of-line
+bindkey "^[[F" end-of-line
+bindkey "^[[3~" delete-char
+bindkey "^[[1;3C" forward-word
+bindkey "^[[1;3D" backward-word
+
+# Source Powerlevel10k theme
+source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
 
 # Finalize Powerlevel10k instant prompt. Should stay at the bottom of ~/.zshrc.
 (( ! ${+functions[p10k-instant-prompt-finalize]} )) || p10k-instant-prompt-finalize
